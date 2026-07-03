@@ -13,14 +13,18 @@ type Task = {
 };
 
 export default function PowerList() {
-  const [tasks, setTask] = useState<Task[]>(() => {
-    const saved = localStorage.getItem("tasks");
-    return saved ? (JSON.parse(saved) as Task[]) : [];
-  });
+  const [tasks, setTask] = useState<Task[]>([]);
+
+  // Load saved tasks once, client-side only
 
   const [input, setInput] = useState<string>("");
   const [editId, setEditId] = useState<number | null>(null);
   const [editText, setEditText] = useState<string>("");
+  
+  useEffect(() => {
+    const saved = localStorage.getItem("tasks");
+    if (saved) setTask(JSON.parse(saved) as Task[]);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -48,8 +52,8 @@ export default function PowerList() {
   const toggleCompleted = (id: number): void => {
     setTask(
       tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
+        task.id === id ? { ...task, completed: !task.completed } : task,
+      ),
     );
   };
 
@@ -61,8 +65,8 @@ export default function PowerList() {
   const saveEdit = (id: number): void => {
     setTask(
       tasks.map((task) =>
-        task.id === id ? { ...task, text: editText } : task
-      )
+        task.id === id ? { ...task, text: editText } : task,
+      ),
     );
     setEditId(null);
     setEditText("");
@@ -75,17 +79,32 @@ export default function PowerList() {
 
   const date = new Date();
   const days = [
-    "Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
   const month = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   return (
     <div className="min-h-screen bg-stone-900 grid py-4 px-2 bg-[url(https://i.pinimg.com/736x/83/4d/14/834d144309673d5786fd6e0f8850ea30.jpg)] bg-cover bg-no-repeat bg-center">
       <div className="bg-white place-self-center min-h-[500px] rounded-xl shadow-lg p-5 w-full sm:w-11/12 sm:max-w-md lg:max-w-xl">
-        
         <h1 className="text-xl sm:text-2xl font-bold flex items-center gap-2 mb-4">
           <TbFilePower className="text-purple-600 text-4xl sm:text-5xl" />
           Power List
@@ -180,4 +199,3 @@ export default function PowerList() {
     </div>
   );
 }
-
