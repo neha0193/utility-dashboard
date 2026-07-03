@@ -12,7 +12,7 @@ git init
 git add .
 git commit -m "first commit"
 git branch -M main
-git remote add origin https://github.com/neha0193/utility-dashboard.git
+git remote add origin ""
 git push -u origin main
 
 ## or push an existing repository from the command line
